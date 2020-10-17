@@ -28,8 +28,7 @@ For nicer alignment you might want to insert `\hardcolumnbreak`, `\columnbreak` 
 though this is usually only done before important contests, and not on master.
 The algorithms that are not included in the pdf are left commented out in `chapter.tex`.
 
-To build KACTL, type `make kactl` (or `make fast`) on a \*nix machine -- this will update `kactl.pdf`.
-(Windows might work as well, but is not tested.) `doc/README` has a few more notes about this.
+To build KACTL, type `make kactl` (or `make fast`) on a \*nix machine -- this will update `kactl.pdf`. On macOS, you need to install md5sha1sum and gcc using Homebrew. Windows might work as well, but is not tested. `doc/README` has a few more notes about this.
 
 Tips:
 1. Check out what's excluded by default by running `make showexcluded`.

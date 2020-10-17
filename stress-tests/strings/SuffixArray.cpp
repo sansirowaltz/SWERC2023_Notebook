@@ -179,11 +179,11 @@ signed compare() {
 		vector<array<int, 2>> res;
 		{
 			timeit x("kactl");
-			old::SuffixArray kactl(S);
-			// cout << kactl.a[100] << endl;
-			auto lcp = kactl.lcp();
+			old::SuffixArray sa(S);
+			// cout << sa.a[100] << endl;
+			auto lcp = sa.lcp();
 			rep(i,0,sz(S)+1)
-				res.push_back({kactl.a[i], lcp[i]});
+				res.push_back({sa.a[i], lcp[i]});
 		}
 		{
 			timeit x("MIT");

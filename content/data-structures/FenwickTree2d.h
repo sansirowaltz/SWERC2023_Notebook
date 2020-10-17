@@ -19,10 +19,11 @@ struct FT2 {
 		for (; x < sz(ys); x |= x + 1) ys[x].push_back(y);
 	}
 	void init() {
-		for (vi& v : ys) sort(all(v)), ft.emplace_back(sz(v));
+		for (vi& v : ys) sort(all(v)), uniq(v), ft.emplace_back(sz(v));
 	}
 	int ind(int x, int y) {
-		return (int)(lower_bound(all(ys[x]), y) - ys[x].begin()); }
+		return (int)(lower_bound(all(ys[x]), y) - ys[x].begin());
+	}
 	void update(int x, int y, ll dif) {
 		for (; x < sz(ys); x |= x + 1)
 			ft[x].update(ind(x, y), dif);

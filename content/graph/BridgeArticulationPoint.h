@@ -9,6 +9,8 @@
  */
 #pragma once
 
+const int N = 1e6 + 6;
+
 int n, m, Time, num[N], low[N], P = 0, Q = 0;
 bool isCut[N];
 unordered_map<int, int> adj[N];

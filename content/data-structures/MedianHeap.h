@@ -3,39 +3,38 @@
  * Date: 2020-10-17
  * License: CC0
  * Source: own work
- * Description: Median heap
+ * Description: Add integers and query median
  * Time: O(\log N)
- * Status: untested
+ * Status: stress-tested
  */
 #pragma once
 
-int main() {
-  priority_queue<int> maxPQ;
-  priority_queue<int, vector<int>, greater<int>> minPQ;
-  string s;
-  while(cin >> s) {
-    if (s == "#") {
-      int m = minPQ.top(); minPQ.pop();
-      if (minPQ.size() != maxPQ.size()) {
-        minPQ.push(maxPQ.top());
-        maxPQ.pop();
+struct MedianHeap {
+  priority_queue<int> minPQ, maxPQ;
+  bool empty() { return minPQ.empty(); }
+  int top() { return -minPQ.top(); }
+  int pop() {
+    if (minPQ.empty()) return -1;
+    int m = -minPQ.top(); minPQ.pop();
+    if (minPQ.size() != maxPQ.size()) {
+      minPQ.push(-maxPQ.top());
+      maxPQ.pop();
+    }
+    return m;
+  }
+  void push(int c) {
+    if (!minPQ.empty() && c > -minPQ.top()) {
+      minPQ.push(-c);
+      if (minPQ.size() > maxPQ.size() + 1) {
+        int d = -minPQ.top(); minPQ.pop();
+        maxPQ.push(d);
       }
-      cout << m << "\n";
     } else {
-      int c = stoi(s);
-      if (!minPQ.empty() && c > minPQ.top()) {
-        minPQ.push(c);
-        if (minPQ.size() > maxPQ.size() + 1) {
-          int d = minPQ.top(); minPQ.pop();
-          maxPQ.push(d);
-        }
-      } else {
-        maxPQ.push(c);
-        if (maxPQ.size() > minPQ.size()) {
-          minPQ.push(maxPQ.top());
-          maxPQ.pop();
-        }
+      maxPQ.push(c);
+      if (maxPQ.size() > minPQ.size()) {
+        minPQ.push(-maxPQ.top());
+        maxPQ.pop();
       }
     }
   }
-}
+};

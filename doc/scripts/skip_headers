@@ -7,3 +7,6 @@ ModSqrt.h
 Hashing-codeforces.h
 NumberTheoreticTransform.h
 MoQueries.h
+Ahu.h
+MinimumDiameterSpanningTree.h
+MinkowskiSum.h

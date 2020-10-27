@@ -9,7 +9,6 @@
  */
 #pragma once
 
-typedef uint64_t ull;
 static int C; // initialized below
 
 // Arithmetic mod two primes and 2^32 simultaneously.

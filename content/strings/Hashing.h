@@ -14,7 +14,6 @@
 // "typedef ull H;" instead if you think test data is random,
 // or work mod 10^9+7 if the Birthday paradox is not a problem.
 struct H {
-	typedef uint64_t ull;
 	ull x; H(ull x=0) : x(x) {}
 #define OP(O,A,B) H operator O(H o) { ull r = x; asm \
 	(A "addq %%rdx, %0\n adcq $0,%0" : "+a"(r) : B); return r; }

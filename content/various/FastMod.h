@@ -13,7 +13,6 @@
  */
 #pragma once
 
-typedef unsigned long long ull;
 struct FastMod {
 	ull b, m;
 	FastMod(ull b) : b(b), m(-1ULL / b) {}

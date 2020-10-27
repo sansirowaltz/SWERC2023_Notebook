@@ -7,6 +7,7 @@ using namespace std;
 #define uniq(x) x.resize(unique(all(x)) - x.begin())
 #define pb push_back
 #define emb emplace_back
+using ull = unsigned long long;
 using ll = long long;
 using pii = pair<int, int>;
 using vi = vector<int>;

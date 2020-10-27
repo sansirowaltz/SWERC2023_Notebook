@@ -7,7 +7,7 @@ failTests=""
 ulimit -s 524288 # For 2-sat test
 for test in $tests; do
     echo "$(basename $test): "
-    start=`date +%s.%N`
+    start=`date +%s`
     g++ -std=c++17 -O2 $test && ./a.out
     retCode=$?
     if (($retCode != 0)); then
@@ -17,7 +17,7 @@ for test in $tests; do
     else
         pass+=1
     fi
-    end=`date +%s.%N`
+    end=`date +%s`
     runtime=$( echo "$end - $start" | bc -l )
     echo "Took $runtime seconds"
     rm -f a.out

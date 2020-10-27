@@ -8,16 +8,13 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-    timeout-minutes: 20
-
     steps:
     - uses: actions/checkout@v2
     - name: Install pdflatex
       run: sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra
     - name: Build pdf
-      run: make kactl
+      run: make hcmus
     - name: Run compiles
       run: make test-compiles
     - name: Run stress tests

@@ -18,15 +18,14 @@ vi pi(const string& s) {
 	return p;
 }
 
-
 void compute_automaton(string s, vector<vi> &aut) {
   int n = s.length();
-  vi pi = pi(s);
+  vi p = pi(s);
   aut.assign(n, vi(26));
   for (int i = 0; i < n; ++i) {
     for (int c = 0; c < 26; ++c) {
       if (i > 0 && s[i] != 'a' + c) {
-        aut[i][c] = aut[pi[i - 1]][c];
+        aut[i][c] = aut[p[i - 1]][c];
       } else {
         aut[i][c] = i + (s[i] == 'a' + c);
       }

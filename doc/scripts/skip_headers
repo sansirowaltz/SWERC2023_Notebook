@@ -10,3 +10,4 @@ MoQueries.h
 Ahu.h
 MinimumDiameterSpanningTree.h
 MinkowskiSum.h
+BridgeArticulationPoint.h

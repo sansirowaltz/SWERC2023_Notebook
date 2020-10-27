@@ -18,12 +18,11 @@ vi pi(const string& s) {
 	return p;
 }
 
-void compute_automaton(string s, vector<vi> &aut) {
-  int n = s.length();
+void compute_automaton(const string& s, vector<vi>& aut) {
   vi p = pi(s);
-  aut.assign(n, vi(26));
-  for (int i = 0; i < n; ++i) {
-    for (int c = 0; c < 26; ++c) {
+  aut.assign(sz(s), vi(26));
+  rep(i,0,sz(s)) {
+    rep(c,0,26) {
       if (i > 0 && s[i] != 'a' + c) {
         aut[i][c] = aut[p[i - 1]][c];
       } else {

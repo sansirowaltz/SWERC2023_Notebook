@@ -8,7 +8,6 @@
  * P is intended to be Point<double>.
  * Status: unit tested
  */
-
 #pragma once
 
 #include "Point.h"

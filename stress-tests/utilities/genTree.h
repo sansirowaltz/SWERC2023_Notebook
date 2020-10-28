@@ -1,8 +1,8 @@
 #pragma once
 
 /*
-  Prufer Code to Tree
-  Complexity: O(VlogV)
+    Prufer Code to Tree
+    Complexity: O(VlogV)
  */
 
 vector<pair<int,int>> pruferCodeToTree(vector<int> &pruferCode) {

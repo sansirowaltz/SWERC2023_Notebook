@@ -1,7 +1,7 @@
 /**
  * Author: hieplpvip
  * Date: 2020-10-17
- * License: own work
+ * License: CC0
  * Source: cp-algorithms
  * Description: Builds suffix automaton for a string.
  * Time: $O(N)$

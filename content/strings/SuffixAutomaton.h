@@ -4,7 +4,7 @@
  * License: own work
  * Source: cp-algorithms
  * Description: Builds suffix automaton for a string.
- * Time: O(n)
+ * Time: $O(N)$
  * Status: untested
  * Usage: Automaton sa; for(char c : s) sa.extend(c - 'a');
  *  1. Number of distinct substr:

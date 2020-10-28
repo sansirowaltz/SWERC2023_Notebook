@@ -1,9 +1,10 @@
 /**
- * Author: Jakob Kogler, chilli, pajenegod
- * Date: 2020-04-12
+ * Author: Le Bao Hiep
+ * Date: 2020-10-27
  * License: CC0
  * Description: Generate all primes and calculate Mobius/Euler's totient
  * function for numbers smaller than N
+ * Time: $O(N)$
  * Status: untested
  */
 #pragma once

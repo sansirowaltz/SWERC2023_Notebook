@@ -35,7 +35,7 @@ struct Automaton {
     int next[33];
   } nodes[N * 2];
   int sz, last;
-  vector<pii> order;
+  //vector<pii> order;
   Automaton() {
     sz = last = 0;
     nodes[0].len = 0;
@@ -47,7 +47,7 @@ struct Automaton {
     int cur = sz++, p;
     nodes[cur].len = nodes[last].len + 1;
     memset(nodes[cur].next, 0, sizeof(nodes[cur].next));
-    order.emb(nodes[cur].len, cur);
+    //order.emb(nodes[cur].len, cur);
     for(p = last; p != -1 && !nodes[p].next[c]; p = nodes[p].link)
       nodes[p].next[c] = cur;
     if (p == -1) nodes[cur].link = 0;
@@ -59,7 +59,7 @@ struct Automaton {
         nodes[clone].len = nodes[p].len + 1;
         nodes[clone].link = nodes[q].link;
         memcpy(nodes[clone].next, nodes[q].next, sizeof(nodes[q].next));
-        order.emb(nodes[clone].len, clone);
+        //order.emb(nodes[clone].len, clone);
         for(; p != -1 && nodes[p].next[c] == q; p = nodes[p].link)
           nodes[p].next[c] = clone;
         nodes[q].link = nodes[cur].link = clone;

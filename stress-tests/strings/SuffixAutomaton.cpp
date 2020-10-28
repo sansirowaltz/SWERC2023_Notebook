@@ -1,32 +1,7 @@
-/**
- * Author: hieplpvip
- * Date: 2020-10-17
- * License: own work
- * Source: cp-algorithms
- * Description: Builds suffix automaton for a string.
- * Time: O(n)
- * Status: untested
- * Usage: Automaton sa; for(char c : s) sa.extend(c - 'a');
- *  1. Number of distinct substr:
- *     - Find number of different paths --> DFS on SA
- *     - f[u] = 1 + sum( f[v] for v in s[u].next
- *  2. Number of occurrences of a substr:
- *     - Initially, in extend: s[cur].cnt = 1; s[clone].cnt = 0;
- *     - Sort order by len
- *     - for (it: reverse order)
- *         p = nodes[it->second].link;
- *         nodes[p].cnt += nodes[it->second].cnt
- *  3. Find total length of different substrings:
- *     - We have f[u] = number of strings starting from node u
- *     - ans[u] = sum(ans[v] + d[v] for v in next[u])
- *  4. Lexicographically k-th substring
- *     - Based on number of different substring
- *  5. Smallest cyclic shift
- *     - Build SA of S+S, then just follow smallest link
- *  6. Find first occurrence
- *     - firstpos[cur] = len[cur] - 1, firstpos[clone] = firstpos[q]
- */
-#pragma once
+#include "../utilities/template.h"
+
+#include "../../content/strings/MinRotation.h"
+#include "../../content/strings/SuffixAutomaton.h"
 
 struct Automaton {
   const static int N = 1e6 + 666;
@@ -68,3 +43,42 @@ struct Automaton {
     last = cur;
   }
 };
+
+int minRotation(string s) {
+	int a=0, N=sz(s); s += s;
+	rep(b,0,N) rep(k,0,N) {
+		if (a+k == b || s[a+k] < s[b+k]) {b += max(0, k-1); break;}
+		if (s[a+k] > s[b+k]) { a = b; break; }
+	}
+	return a;
+}
+
+int main() {
+  srand(8);
+  rep(N,5,10000) {
+    string s;
+    rep(i,0,N) s.push_back(rand() % 26 + 'a');
+
+    Automaton sa;
+    for (char &c: s) sa.extend(c - 'a');
+    for (char &c: s) sa.extend(c - 'a');
+    string smallestShift = "";
+    int cur = 0;
+    rep(i,0,sz(s)) {
+      int let = -1;
+      rep(j,0,26) {
+        if (sa.nodes[cur].next[j]) {
+          let = j;
+          break;
+        }
+      }
+      assert(let != -1);
+      smallestShift += (char)(let + 'a');
+      cur = sa.nodes[cur].next[let];
+    }
+
+    rotate(s.begin(), s.begin() + minRotation(s), s.end());
+    assert(s == smallestShift);
+  }
+  cout << "Tests passed!" << endl;
+}

@@ -9,3 +9,4 @@ NumberTheoreticTransform.h
 MoQueries.h
 MinimumDiameterSpanningTree.h
 MinkowskiSum.h
+IterateBitset.h

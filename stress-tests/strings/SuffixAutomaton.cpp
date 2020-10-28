@@ -3,47 +3,6 @@
 #include "../../content/strings/MinRotation.h"
 #include "../../content/strings/SuffixAutomaton.h"
 
-struct Automaton {
-  const static int N = 1e6 + 666;
-  struct Node {
-    int len, link;
-    int next[33];
-  } nodes[N * 2];
-  int sz, last;
-  vector<pii> order;
-  Automaton() {
-    sz = last = 0;
-    nodes[0].len = 0;
-    nodes[0].link = -1;
-    memset(nodes[0].next, 0, sizeof(nodes[0].next));
-    ++sz;
-  }
-  void extend(int c) {
-    int cur = sz++, p;
-    nodes[cur].len = nodes[last].len + 1;
-    memset(nodes[cur].next, 0, sizeof(nodes[cur].next));
-    order.emb(nodes[cur].len, cur);
-    for(p = last; p != -1 && !nodes[p].next[c]; p = nodes[p].link)
-      nodes[p].next[c] = cur;
-    if (p == -1) nodes[cur].link = 0;
-    else {
-      int q = nodes[p].next[c];
-      if (nodes[p].len + 1 == nodes[q].len) nodes[cur].link = q;
-      else {
-        int clone = sz++;
-        nodes[clone].len = nodes[p].len + 1;
-        nodes[clone].link = nodes[q].link;
-        memcpy(nodes[clone].next, nodes[q].next, sizeof(nodes[q].next));
-        order.emb(nodes[clone].len, clone);
-        for(; p != -1 && nodes[p].next[c] == q; p = nodes[p].link)
-          nodes[p].next[c] = clone;
-        nodes[q].link = nodes[cur].link = clone;
-      }
-    }
-    last = cur;
-  }
-};
-
 int main() {
   srand(8);
   rep(N,5,10000) {

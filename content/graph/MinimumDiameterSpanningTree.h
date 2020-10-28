@@ -2,9 +2,9 @@
  * Author: hieplpvip
  * Date: 2020-10-17
  * License: CC0
- * Source: own work
+ * Source: https://web.archive.org/web/20160309101249/https://adn.botao.hu/adn-backup/blog/attachments/month_0705/32007531153238.pdf
  * Description: Finds a minimum diameter spanning tree
- * Time: unknown
+ * Time: O(n ^ 3)
  * Status: untested
  */
 #pragma once

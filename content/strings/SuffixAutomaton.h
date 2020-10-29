@@ -5,7 +5,7 @@
  * Source: cp-algorithms
  * Description: Builds suffix automaton for a string.
  * Time: $O(N)$
- * Status: untested
+ * Status: stress-tested
  * Usage: Automaton sa; for(char c : s) sa.extend(c - 'a');
  *  1. Number of distinct substr:
  *     - Find number of different paths --> DFS on SA
@@ -31,8 +31,7 @@
 struct Automaton {
   const static int N = 1e6 + 666;
   struct Node {
-    int len, link;
-    int next[33];
+    int len, link, next[33];
   } nodes[N * 2];
   int sz, last;
   //vector<pii> order;
@@ -48,7 +47,7 @@ struct Automaton {
     nodes[cur].len = nodes[last].len + 1;
     memset(nodes[cur].next, 0, sizeof(nodes[cur].next));
     //order.emb(nodes[cur].len, cur);
-    for(p = last; p != -1 && !nodes[p].next[c]; p = nodes[p].link)
+    for (p = last; p != -1 && !nodes[p].next[c]; p = nodes[p].link)
       nodes[p].next[c] = cur;
     if (p == -1) nodes[cur].link = 0;
     else {
@@ -60,7 +59,7 @@ struct Automaton {
         nodes[clone].link = nodes[q].link;
         memcpy(nodes[clone].next, nodes[q].next, sizeof(nodes[q].next));
         //order.emb(nodes[clone].len, clone);
-        for(; p != -1 && nodes[p].next[c] == q; p = nodes[p].link)
+        for (; p != -1 && nodes[p].next[c] == q; p = nodes[p].link)
           nodes[p].next[c] = clone;
         nodes[q].link = nodes[cur].link = clone;
       }

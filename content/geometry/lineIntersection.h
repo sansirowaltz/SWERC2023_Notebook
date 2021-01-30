@@ -15,9 +15,9 @@ Products of three coordinates are used in intermediate steps so watch out for ov
 \end{minipage}
  * Status: stress-tested, and tested through half-plane tests
  * Usage:
- * 	auto res = lineInter(s1,e1,s2,e2);
- * 	if (res.first == 1)
- * 		cout << "intersection point at " << res.second << endl;
+ *   auto res = lineInter(s1,e1,s2,e2);
+ *   if (res.first == 1)
+ *     cout << "intersection point at " << res.second << endl;
  */
 #pragma once
 
@@ -25,9 +25,9 @@ Products of three coordinates are used in intermediate steps so watch out for ov
 
 template<class P>
 pair<int, P> lineInter(P s1, P e1, P s2, P e2) {
-	auto d = (e1 - s1).cross(e2 - s2);
-	if (d == 0) // if parallel
-		return {-(s1.cross(e1, s2) == 0), P(0, 0)};
-	auto p = s2.cross(e1, e2), q = s2.cross(e2, s1);
-	return {1, (s1 * p + e1 * q) / d};
+  auto d = (e1 - s1).cross(e2 - s2);
+  if (d == 0) // if parallel
+    return {-(s1.cross(e1, s2) == 0), P(0, 0)};
+  auto p = s2.cross(e1, e2), q = s2.cross(e2, s1);
+  return {1, (s1 * p + e1 * q) / d};
 }

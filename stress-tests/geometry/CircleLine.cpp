@@ -20,31 +20,31 @@ int main() {
         auto res = circleLine(P(4, 4), 1, P(0,  0), P(5, 0));
         assert(res.size() == 0);
     }
-	rep(it,0,100000) {
-		P a = randIntPt(5);
-		P b = randIntPt(5);
-		P c = randIntPt(5);
-		if (a == b) {
-			// Not a well defined line
-			continue;
-		}
-		double r = sqrt(rand() % 49);
-		vector<P> points = circleLine(c, r, a, b);
+  rep(it,0,100000) {
+    P a = randIntPt(5);
+    P b = randIntPt(5);
+    P c = randIntPt(5);
+    if (a == b) {
+      // Not a well defined line
+      continue;
+    }
+    double r = sqrt(rand() % 49);
+    vector<P> points = circleLine(c, r, a, b);
 
-		// Soundness
-		assert(sz(points) <= 2);
-		for (P p : points) {
-			// Point is on circle
-			assert(abs((p - c).dist() - r) < 1e-6);
-			// Point is on line
-			assert(lineDist(a, b, p) < 1e-6);
-		}
+    // Soundness
+    assert(sz(points) <= 2);
+    for (P p : points) {
+      // Point is on circle
+      assert(abs((p - c).dist() - r) < 1e-6);
+      // Point is on line
+      assert(lineDist(a, b, p) < 1e-6);
+    }
 
-		// Best-effort completeness check:
-		// in some easy cases we must have points in the intersection.
-		if ((a - c).dist() < r - 1e-6 || (b - c).dist() < r - 1e-6 || ((a + b) / 2 - c).dist() < r - 1e-6) {
-			assert(!points.empty());
-		}
-	}
+    // Best-effort completeness check:
+    // in some easy cases we must have points in the intersection.
+    if ((a - c).dist() < r - 1e-6 || (b - c).dist() < r - 1e-6 || ((a + b) / 2 - c).dist() < r - 1e-6) {
+      assert(!points.empty());
+    }
+  }
     cout<<"Tests passed!"<<endl;
 }

@@ -12,9 +12,9 @@ Returns the shortest distance between point p and the line segment from point s 
 \includegraphics[width=\textwidth]{content/geometry/SegmentDistance}
 \end{minipage}
  * Status: tested
- * Usage: 
- * 	Point<double> a, b(2,2), p(1,1);
- * 	bool onSegment = segDist(a,b,p) < 1e-10;
+ * Usage:
+ *   Point<double> a, b(2,2), p(1,1);
+ *   bool onSegment = segDist(a,b,p) < 1e-10;
  */
 #pragma once
 
@@ -22,7 +22,7 @@ Returns the shortest distance between point p and the line segment from point s 
 
 typedef Point<double> P;
 double segDist(P& s, P& e, P& p) {
-	if (s==e) return (p-s).dist();
-	auto d = (e-s).dist2(), t = min(d,max(.0,(p-s).dot(e-s)));
-	return ((p-s)*d-(e-s)*t).dist()/d;
+  if (s==e) return (p-s).dist();
+  auto d = (e-s).dist2(), t = min(d,max(.0,(p-s).dot(e-s)));
+  return ((p-s)*d-(e-s)*t).dist()/d;
 }

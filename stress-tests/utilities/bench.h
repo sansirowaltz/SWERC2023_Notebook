@@ -5,9 +5,9 @@
 ll rdtsc() { return __rdtsc(); }
 
 ll tick() {
-	struct timespec tp;
-	if (clock_gettime(CLOCK_MONOTONIC, &tp)) abort();
-	return tp.tv_sec * 1'000'000'000LL + tp.tv_nsec;
+  struct timespec tp;
+  if (clock_gettime(CLOCK_MONOTONIC, &tp)) abort();
+  return tp.tv_sec * 1'000'000'000LL + tp.tv_nsec;
 }
 
 struct timeit {

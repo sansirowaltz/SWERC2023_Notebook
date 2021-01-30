@@ -28,7 +28,7 @@ struct MinHull {
     dq.push_back(newLine);
   }
   T query(T x) {
-		// change >= to <= this to get MaxHull
+    // change >= to <= this to get MaxHull
     while (seen + 1 < dq.size() && dq[seen].calc(x) >= dq[seen + 1].calc(x))
       ++seen;
     return dq[seen].calc(x);

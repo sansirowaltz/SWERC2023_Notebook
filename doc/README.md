@@ -19,17 +19,17 @@ Unfortunately it doesn't contain that much at the moment, but good luck anyway :
 # System requirements
 
 The build process uses the following tools:
-	LaTeX (pdflatex together with some common packages such as 'listings')
-	Python
-	make
+  LaTeX (pdflatex together with some common packages such as 'listings')
+  Python
+  make
 
 It has been tested with the following versions:
-	pdfTeX 3.141592-1.40.3-2.2 (Web2C 7.5.6), part of TeXLive-2007
-	pdfeTeX 3.141592-1.21a-2.2 (Web2C 7.5.4)
-	Python 2.5.1
-	Python 2.4.4
-	GNU Make 3.81
-	GNU Make version 3.79.1
+  pdfTeX 3.141592-1.40.3-2.2 (Web2C 7.5.6), part of TeXLive-2007
+  pdfeTeX 3.141592-1.21a-2.2 (Web2C 7.5.4)
+  Python 2.5.1
+  Python 2.4.4
+  GNU Make 3.81
+  GNU Make version 3.79.1
 but should (could?) work with other versions too.
 
 # Building the KACTL

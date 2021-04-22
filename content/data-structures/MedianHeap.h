@@ -16,7 +16,7 @@ struct MedianHeap {
   int pop() {
     if (minPQ.empty()) return -1;
     int m = -minPQ.top(); minPQ.pop();
-    if (minPQ.size() != maxPQ.size()) {
+    if (minPQ.size() < maxPQ.size()) {
       minPQ.push(-maxPQ.top());
       maxPQ.pop();
     }
@@ -26,8 +26,8 @@ struct MedianHeap {
     if (!minPQ.empty() && c > -minPQ.top()) {
       minPQ.push(-c);
       if (minPQ.size() > maxPQ.size() + 1) {
-        int d = -minPQ.top(); minPQ.pop();
-        maxPQ.push(d);
+        maxPQ.push(-minPQ.top());
+        minPQ.pop();
       }
     } else {
       maxPQ.push(c);

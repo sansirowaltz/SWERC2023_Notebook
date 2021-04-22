@@ -1,5 +1,5 @@
 //#pragma GCC optimize("Ofast")
-//#pragma GCC target("avx2")
+//#pragma GCC target("avx,avx2,fma,popcnt")
 #include <bits/stdc++.h>
 #define rep(i, a, b) for (int i = a; i < (b); ++i)
 #define all(x) begin(x), end(x)

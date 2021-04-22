@@ -3,11 +3,11 @@
 #include "../../content/strings/MinRotation.h"
 #include "../../content/strings/SuffixAutomaton.h"
 
-int dfs(Automaton &sa, int cur) {
+int dfs(SuffixAutomaton &sa, int cur) {
   int res = 1;
   rep(i,0,26) {
-    if (sa.nodes[cur].next[i]) {
-      res += dfs(sa, sa.nodes[cur].next[i]);
+    if (sa.nxt[cur][i]) {
+      res += dfs(sa, sa.nxt[cur][i]);
     }
   }
   return res;
@@ -19,7 +19,7 @@ int main() {
     string s;
     rep(i,0,N) s.push_back(rand() % 26 + 'a');
 
-    Automaton sa;
+    SuffixAutomaton sa;
     for (char &c: s) sa.extend(c - 'a');
     for (char &c: s) sa.extend(c - 'a');
     string smallestShift = "";
@@ -27,14 +27,14 @@ int main() {
     rep(i,0,sz(s)) {
       int let = -1;
       rep(j,0,26) {
-        if (sa.nodes[cur].next[j]) {
+        if (sa.nxt[cur][j]) {
           let = j;
           break;
         }
       }
       assert(let != -1);
       smallestShift += (char)(let + 'a');
-      cur = sa.nodes[cur].next[let];
+      cur = sa.nxt[cur][let];
     }
 
     rotate(s.begin(), s.begin() + minRotation(s), s.end());
@@ -49,7 +49,7 @@ int main() {
       st.insert(s.substr(i, j - i + 1));
     }
 
-    Automaton sa;
+    SuffixAutomaton sa;
     for (char &c: s) sa.extend(c - 'a');
 
     assert(sz(st) == (dfs(sa, 0) - 1));

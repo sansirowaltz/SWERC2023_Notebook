@@ -22,30 +22,34 @@ int main() {
   rep(N,2,3000) {
     vi perm(N); iota(all(perm), 0); random_shuffle(all(perm));
     auto edges = generateTree(N);
-    vector<vi> g[2];
-    g[0].resize(N); g[1].resize(N);
+    Ahu ahu;
+    ahu.n = N;
+    ahu.g1.resize(N);
+    ahu.g2.resize(N);
     for (auto e: edges) {
-      g[0][e.first].emb(e.second);
-      g[0][e.second].emb(e.first);
-      g[1][perm[e.first]].emb(perm[e.second]);
-      g[1][perm[e.second]].emb(perm[e.first]);
+      ahu.g1[e.first].emb(e.second);
+      ahu.g1[e.second].emb(e.first);
+      ahu.g2[perm[e.first]].emb(perm[e.second]);
+      ahu.g2[perm[e.second]].emb(perm[e.first]);
     }
-    assert(checkIsomorphic(g));
+    assert(ahu.check());
   }
   rep(N,100,3000) {
-    vector<vi> g[2];
-    g[0].resize(N); g[1].resize(N);
+    Ahu ahu;
+    ahu.n = N;
+    ahu.g1.resize(N);
+    ahu.g2.resize(N);
     auto edges = generateTree(N);
     for (auto e: edges) {
-      g[0][e.first].emb(e.second);
-      g[0][e.second].emb(e.first);
+      ahu.g1[e.first].emb(e.second);
+      ahu.g1[e.second].emb(e.first);
     }
     edges = generateTree(N);
     for (auto e: edges) {
-      g[1][e.first].emb(e.second);
-      g[1][e.second].emb(e.first);
+      ahu.g2[e.first].emb(e.second);
+      ahu.g2[e.second].emb(e.first);
     }
-    assert(!checkIsomorphic(g));
+    assert(!ahu.check());
   }
   cout << "Tests passed!" << endl;
 }

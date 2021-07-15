@@ -1,20 +1,20 @@
 #include "../utilities/template.h"
 
 struct Bumpalloc {
-	char buf[450 << 20];
-	size_t bufp;
-	void* alloc(size_t s) {
-		assert(s < bufp);
-		return (void*)&buf[bufp -= s];
-	}
-	Bumpalloc() { reset(); }
+  char buf[450 << 20];
+  size_t bufp;
+  void* alloc(size_t s) {
+    assert(s < bufp);
+    return (void*)&buf[bufp -= s];
+  }
+  Bumpalloc() { reset(); }
 
-	template<class T> T* operator=(T&& x) {
-		T* r = (T*)alloc(sizeof(T));
-		new(r) T(move(x));
-		return r;
-	}
-	void reset() { bufp = sizeof buf; }
+  template<class T> T* operator=(T&& x) {
+    T* r = (T*)alloc(sizeof(T));
+    new(r) T(move(x));
+    return r;
+  }
+  void reset() { bufp = sizeof buf; }
 } bumpalloc;
 
 // When not testing perf, we don't want to leak memory
@@ -102,59 +102,59 @@ int Directed_MST(int root, int NV, int NE) {
 
 int adj[105][105];
 int main() {
-	rep(it,0,50000) {
-		bumpalloc.reset();
-		int n = (rand()%20)+1;
-		int density = rand() % 101;
-		int r = rand()%n;
-		int cnt = 0;
-		vector<Edge> edges;
-		rep(i,0,n)
-			rep(j,0,n){
-				if (i==j) continue;
-				if (rand() % 100 >= density) continue;
-				int weight = rand()%100;
-				mit::E[cnt++] = {i,j, weight};
-				edges.push_back({i,j,weight});
-				adj[i][j] = weight;
-			}
+  rep(it,0,50000) {
+    bumpalloc.reset();
+    int n = (rand()%20)+1;
+    int density = rand() % 101;
+    int r = rand()%n;
+    int cnt = 0;
+    vector<Edge> edges;
+    rep(i,0,n)
+      rep(j,0,n){
+        if (i==j) continue;
+        if (rand() % 100 >= density) continue;
+        int weight = rand()%100;
+        mit::E[cnt++] = {i,j, weight};
+        edges.push_back({i,j,weight});
+        adj[i][j] = weight;
+      }
 
-		ll ans1 = mit::Directed_MST(r, n, cnt);
-		auto pa = dmst(n, r, edges);
-		ll ans2 = pa.first;
-		assert(ans1 == ans2);
+    ll ans1 = mit::Directed_MST(r, n, cnt);
+    auto pa = dmst(n, r, edges);
+    ll ans2 = pa.first;
+    assert(ans1 == ans2);
 
-		// Verifying reconstruction:
-		if (ans1 != -1) {
-			vi par = pa.second;
-			if (0) {
-				cout << "r = " << r << endl;
-				for(auto &x: par) cout << x << ' ';
-				cout << endl;
-				for(auto &e: edges) {
-					cout << e.a << ' ' << e.b << ' ' << e.w << endl;
-				}
-			}
-			ll sum = 0;
-			vector<vi> ch(n);
-			rep(i,0,n) {
-				if (i == r) assert(par[i] == -1);
-				else {
-					assert(par[i] != -1);
-					sum += adj[par[i]][i];
-					ch[par[i]].push_back(i);
-				}
-			}
-			assert(sum == ans1);
-			vi seen(n), q = {r};
-			rep(qi,0,sz(q)) {
-				int s = q[qi];
-				if (!seen[s]++)
-					for(auto &x: ch[s]) q.push_back(x);
-			}
-			assert(count(all(seen), 0) == 0);
-		}
-	}
-	cout<<"Tests passed!"<<endl;
-	return 0;
+    // Verifying reconstruction:
+    if (ans1 != -1) {
+      vi par = pa.second;
+      if (0) {
+        cout << "r = " << r << endl;
+        for(auto &x: par) cout << x << ' ';
+        cout << endl;
+        for(auto &e: edges) {
+          cout << e.a << ' ' << e.b << ' ' << e.w << endl;
+        }
+      }
+      ll sum = 0;
+      vector<vi> ch(n);
+      rep(i,0,n) {
+        if (i == r) assert(par[i] == -1);
+        else {
+          assert(par[i] != -1);
+          sum += adj[par[i]][i];
+          ch[par[i]].push_back(i);
+        }
+      }
+      assert(sum == ans1);
+      vi seen(n), q = {r};
+      rep(qi,0,sz(q)) {
+        int s = q[qi];
+        if (!seen[s]++)
+          for(auto &x: ch[s]) q.push_back(x);
+      }
+      assert(count(all(seen), 0) == 0);
+    }
+  }
+  cout<<"Tests passed!"<<endl;
+  return 0;
 }

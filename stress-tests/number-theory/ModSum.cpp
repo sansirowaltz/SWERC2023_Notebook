@@ -68,7 +68,7 @@ int main() {
     ll c = (ll)rand() << 2;
     ll k = (ll)rand() << 2;
     ll m = (ll)rand() >> 2;
-    //assert(abs((long double)modsum(t, c, k, m) / ((long double)m/2 * t) - 1)<1e-5);
+    assert(abs(modsum(t, c, k, m) / ((long double)m/2 * t) - 1)<1e-5);
   }
   cout<<"Tests passed!"<<endl;
   return 0;

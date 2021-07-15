@@ -9,7 +9,7 @@
 
 typedef Point<double> P;
 int main() {
-  //feenableexcept(29);
+  feenableexcept(29);
   rep(it,0,100000) {{
     vector<P> ps;
     int N = rand() % 20 + 1;

@@ -22,7 +22,7 @@ for test in $tests; do
     else
         pass+=1
     fi
-    end=`date +%s`
+    end=`date +%s.%N`
     runtime=$( echo "$end - $start" | bc -l )
     echo "Took $runtime seconds"
     rm -f a.out

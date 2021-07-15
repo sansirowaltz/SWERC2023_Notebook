@@ -21,8 +21,7 @@ vector<array<int, 3>> manhattanMST(vector<P> ps) {
   vector<array<int, 3>> edges;
   rep(k,0,4) {
     sort(all(id), [&](int i, int j) {
-      return (ps[i]-ps[j]).x < (ps[j]-ps[i]).y;
-    });
+      return (ps[i]-ps[j]).x < (ps[j]-ps[i]).y;});
     map<int, int> sweep;
     for (int i : id) {
       for (auto it = sweep.lower_bound(-ps[i].y);

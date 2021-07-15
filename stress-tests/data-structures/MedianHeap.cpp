@@ -11,7 +11,7 @@ int main() {
     random_shuffle(all(a));
     rep(i,0,2*N) {
       if (a.size() == 0 || (b.size() > 0 && rand() % 2 == 0)) {
-        int ind = b.size() / 2;
+        int ind = (int)b.size() / 2;
         assert(!mh.empty());
         assert(mh.pop() == b[ind]);
         b.erase(b.begin() + ind);

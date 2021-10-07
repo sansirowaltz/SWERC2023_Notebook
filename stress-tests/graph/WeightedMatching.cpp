@@ -3,7 +3,6 @@
 #include "../utilities/random.h"
 
 #include "../../content/graph/WeightedMatching.h"
-#include <bits/extc++.h> /// include-line, keep-include
 #include "../../content/graph/MinCostMaxFlow.h"
 
 void test(int N, int mxCost, int iters) {

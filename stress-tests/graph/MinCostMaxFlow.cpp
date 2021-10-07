@@ -4,7 +4,6 @@
 // #include "mcmf4.h"
 // #include "mcmfold.h"
 // #include "mcmfnew.h"
-#include <bits/extc++.h>
 #define setpi dummy(){} bool setpi
 #undef assert
 #define assert(x) return x

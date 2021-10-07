@@ -48,5 +48,6 @@ signed main() {
     test(100, 1000, 100);
     test(100, 1, 50);
     test(5, 5, 10000);
+    test(1000, 1000, 100);
     cout << "Tests passed!" << endl;
 }

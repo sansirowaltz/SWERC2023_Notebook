@@ -1,93 +1,70 @@
 /**
- * Author: Stanford
- * Date: Unknown
- * Source: Stanford Notebook
- * Description: Min-cost max-flow. cap[i][j] != cap[j][i] is allowed; double edges are not.
- *  If costs can be negative, call setpi before maxflow, but note that negative cost cycles are not supported.
- *  To obtain the actual flow, look at positive values only.
+ * Author: Benjamin Qi
+ * Date: 2021-10-07
+ * License: CC0
+ * Source: https://github.com/bqi343/USACO/blob/master/Implementations/content/graphs%20(12)/Flows%20(12.3)/MCMF.h
+ * Description: Min-cost max-flow, assumes no negative cycles.
+ *  If costs can be negative, call setpi before maxflow.
+ *  To get flow through original edges, assign ID's during \texttt{addEdge}.
  * Status: Tested on kattis:mincostmaxflow, stress-tested against another implementation
- * Time: Approximately O(E^2)
+ * Time: Ignoring setpi, $O(FM\log M)$ if caps are integers and $F$ is max flow.
  */
 #pragma once
 
-// #include <bits/extc++.h> /// include-line, keep-include
-
-const ll INF = numeric_limits<ll>::max() / 4;
-typedef vector<ll> VL;
-
 struct MCMF {
-  int N;
-  vector<vi> ed, red;
-  vector<VL> cap, flow, cost;
-  vi seen;
-  VL dist, pi;
-  vector<pii> par;
+  using F = ll; using C = ll; using T = pair<C, int>;
+  const C inf = numeric_limits<C>::max();
+  struct Edge { int to, rev; F flo, cap; C cost; };
+  int N; vector<C> pi, dist; vector<pii> pre; vector<vector<Edge>> adj;
 
-  MCMF(int N) :
-    N(N), ed(N), red(N), cap(N, VL(N)), flow(cap), cost(cap),
-    seen(N), dist(N), pi(N), par(N) {}
+  MCMF(int N) : N(N), pi(N), dist(N), pre(N), adj(N) {}
 
-  void addEdge(int from, int to, ll cap, ll cost) {
-    this->cap[from][to] = cap;
-    this->cost[from][to] = cost;
-    ed[from].push_back(to);
-    red[to].push_back(from);
+  void addEdge(int u, int v, F cap, C cost) {
+    adj[u].pb({v, sz(adj[v]), 0, cap, cost});
+    adj[v].pb({u, sz(adj[u]) - 1, 0, 0, -cost});
   }
 
-  void path(int s) {
-    fill(all(seen), 0);
-    fill(all(dist), INF);
-    dist[s] = 0; ll di;
-
-    __gnu_pbds::priority_queue<pair<ll, int>> q;
-    vector<decltype(q)::point_iterator> its(N);
-    q.push({0, s});
-
-    auto relax = [&](int i, ll cap, ll cost, int dir) {
-      ll val = di - pi[i] + cost;
-      if (cap && val < dist[i]) {
-        dist[i] = val;
-        par[i] = {s, dir};
-        if (its[i] == q.end()) its[i] = q.push({-dist[i], i});
-        else q.modify(its[i], {-dist[i], i});
-      }
-    };
-
+  bool path(int s, int t) {
+    dist.assign(N, inf);
+    priority_queue<T, vector<T>, greater<T>> q;
+    q.push({dist[s] = 0, s});
     while (!q.empty()) {
-      s = q.top().second; q.pop();
-      seen[s] = 1; di = dist[s] + pi[s];
-      for (int i : ed[s]) if (!seen[i])
-        relax(i, cap[s][i] - flow[s][i], cost[s][i], 1);
-      for (int i : red[s]) if (!seen[i])
-        relax(i, flow[i][s], -cost[i][s], 0);
+      C nd; T x = q.top(); q.pop();
+      if (x.first > dist[x.second]) continue;
+      for (auto& e : adj[x.second]) {
+        if (e.flo < e.cap && dist[e.to] > (nd = x.first + e.cost + pi[x.second] - pi[e.to]))
+          pre[e.to] = {x.second, e.rev}, q.push({dist[e.to] = nd, e.to});
+      }
     }
-    rep(i,0,N) pi[i] = min(pi[i] + dist[i], INF);
+    return dist[t] != inf;
   }
 
-  pair<ll, ll> maxflow(int s, int t) {
-    ll totflow = 0, totcost = 0;
-    while (path(s), seen[t]) {
-      ll fl = INF;
-      for (int p,r,x = t; tie(p,r) = par[x], x != s; x = p)
-        fl = min(fl, r ? cap[p][x] - flow[p][x] : flow[x][p]);
-      totflow += fl;
-      for (int p,r,x = t; tie(p,r) = par[x], x != s; x = p)
-        if (r) flow[p][x] += fl;
-        else flow[x][p] -= fl;
+  pair<F, C> maxflow(int s, int t) {
+    F totFlow = 0; C totCost = 0;
+    while (path(s, t)) {
+      rep(i,0,N) pi[i] += dist[i];
+      F df = numeric_limits<F>::max();
+      for (int x = t; x != s; x = pre[x].first) {
+        Edge& e = adj[pre[x].first][adj[x][pre[x].second].rev];
+        df = min(df, e.cap - e.flo);
+      }
+      totFlow += df; totCost += (pi[t] - pi[s]) * df;
+      for (int x = t; x != s; x = pre[x].first) {
+        Edge& e = adj[x][pre[x].second]; e.flo -= df;
+        adj[pre[x].first][e.rev].flo += df;
+      }
     }
-    rep(i,0,N) rep(j,0,N) totcost += cost[i][j] * flow[i][j];
-    return {totflow, totcost};
+    return {totFlow, totCost};
   }
 
   // If some costs can be negative, call this before maxflow:
   void setpi(int s) { // (otherwise, leave this out)
-    fill(all(pi), INF); pi[s] = 0;
-    int it = N, ch = 1; ll v;
-    while (ch-- && it--)
-      rep(i,0,N) if (pi[i] != INF)
-        for (int to : ed[i]) if (cap[i][to])
-          if ((v = pi[i] + cost[i][to]) < pi[to])
-            pi[to] = v, ch = 1;
+    fill(all(pi), inf); pi[s] = 0;
+    int it = N, ch = 1; C v;
+    while (ch-- && it--) rep(i,0,N) if (pi[i] != inf)
+      for (auto e : adj[i])
+        if (e.cap && (v = pi[i] + e.cost) < pi[e.to])
+          pi[e.to] = v, ch = 1;
     assert(it >= 0); // negative cost cycle
   }
 };

@@ -14,8 +14,9 @@ using ull = unsigned long long;
 using ll = long long;
 using pii = pair<int, int>;
 using vi = vector<int>;
+template <typename T> using min_heap = priority_queue<T, vector<T>, greater<T>>;
 
 int main() {
-  ios::sync_with_stdio(false); cin.tie(0); cout.tie(0);
+  ios::sync_with_stdio(false); cin.tie(0);
   return 0;
 }

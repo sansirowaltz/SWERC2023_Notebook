@@ -11,8 +11,8 @@
  * Usage:
  *  int eid = 0; ed.resize(N);
  *  for each edge (a,b) {
- *    ed[a].emplace_back(b, eid);
- *    ed[b].emplace_back(a, eid++); }
+ *    ed[a].emb(b, eid);
+ *    ed[b].emb(a, eid++); }
  *  bicomps([\&](const vi\& edgelist) {...});
  * Time: O(E + V)
  * Status: tested during MIPT ICPC Workshop 2017
@@ -29,24 +29,22 @@ int dfs(int at, int par, F& f) {
     tie(y, e) = pa;
     if (num[y]) {
       top = min(top, num[y]);
-      if (num[y] < me)
-        st.push_back(e);
+      if (num[y] < me) st.emb(e);
     } else {
       int si = sz(st);
       int up = dfs(y, e, f);
       top = min(top, up);
       if (up == me) {
-        st.push_back(e);
+        st.emb(e);
         f(vi(st.begin() + si, st.end()));
         st.resize(si);
       }
-      else if (up < me) st.push_back(e);
+      else if (up < me) st.emb(e);
       else { /* e is a bridge */ }
     }
   }
   return top;
 }
-
 template<class F>
 void bicomps(F f) {
   num.assign(sz(ed), 0);

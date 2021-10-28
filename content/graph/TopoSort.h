@@ -18,7 +18,7 @@ vi topoSort(const vector<vi>& gr) {
   rep(i,0,sz(gr)) if (indeg[i] == 0) q.push(i);
   while (!q.empty()) {
     int i = q.front(); // top() for priority queue
-    ret.push_back(i);
+    ret.emb(i);
     q.pop();
     for (int x : gr[i])
       if (--indeg[x] == 0) q.push(x);

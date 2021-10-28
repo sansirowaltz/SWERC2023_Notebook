@@ -19,7 +19,6 @@ inline char gc() { // like getchar()
   }
   return buf[bc++]; // returns 0 on EOF
 }
-
 int readInt() {
   int a, c;
   while ((a = gc()) < 40);

@@ -34,7 +34,7 @@ vector<F> hull3d(const vector<P3>& A) {
       q = q * -1;
     F f{q, i, j, k};
     E(a,b).ins(k); E(a,c).ins(j); E(b,c).ins(i);
-    FS.push_back(f);
+    FS.pb(f);
   };
   rep(i,0,4) rep(j,i+1,4) rep(k,j+1,4)
     mf(i, j, k, 6 - i - j - k);

@@ -25,7 +25,7 @@ struct MinHull {
     Line newLine(a, b);
     while (dq.size() > seen + 1 && overlap(dq[(int)dq.size() - 2], dq.back(), newLine))
       dq.pop_back();
-    dq.push_back(newLine);
+    dq.pb(newLine);
   }
   T query(T x) {
     // change >= to <= this to get MaxHull

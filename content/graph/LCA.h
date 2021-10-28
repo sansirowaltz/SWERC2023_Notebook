@@ -22,7 +22,7 @@ struct LCA {
   void dfs(vector<vi>& C, int v, int par) {
     time[v] = T++;
     for (int y : C[v]) if (y != par) {
-      path.push_back(v), ret.push_back(time[v]);
+      path.emb(v), ret.emb(time[v]);
       dfs(C, y, v);
     }
   }

@@ -15,7 +15,7 @@ template<class I> vi lis(const vector<I>& S) {
   rep(i,0,sz(S)) {
     // change 0 -> i for longest non-decreasing subsequence
     auto it = lower_bound(all(res), p{S[i], 0});
-    if (it == res.end()) res.emplace_back(), it = res.end()-1;
+    if (it == res.end()) res.emb(), it = res.end()-1;
     *it = {S[i], i};
     prev[i] = it == res.begin() ? 0 : (it-1)->second;
   }

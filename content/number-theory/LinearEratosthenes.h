@@ -16,7 +16,7 @@ void linearSieve() {
   phi[1] = mu[1] = 1;
   for (int i = 2; i <= N; ++i) {
     if (lp[i] == 0) {
-      pr.emplace_back(i);
+      pr.emb(i);
       lp[i] = i; phi[i] = i - 1; mu[i] = -1;
     }
     for (int j = 0; j < (int)pr.size() && pr[j] <= lp[i] && i * pr[j] <= N; ++j) {

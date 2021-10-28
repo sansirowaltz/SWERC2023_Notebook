@@ -18,24 +18,18 @@ vi pi(const string& s) {
   }
   return p;
 }
-
 void compute_automaton(const string& s, vector<vi>& aut) {
   vi p = pi(s);
   aut.assign(sz(s), vi(26));
-  rep(i,0,sz(s)) {
-    rep(c,0,26) {
-      if (i > 0 && s[i] != 'a' + c) {
-        aut[i][c] = aut[p[i - 1]][c];
-      } else {
-        aut[i][c] = i + (s[i] == 'a' + c);
-      }
-    }
-  }
+  rep(i,0,sz(s)) rep(c,0,26)
+    if (i > 0 && s[i] != 'a' + c)
+      aut[i][c] = aut[p[i - 1]][c];
+    else
+      aut[i][c] = i + (s[i] == 'a' + c);
 }
-
 vi match(const string& s, const string& pat) {
   vi p = pi(pat + '\0' + s), res;
   rep(i,sz(p)-sz(s),sz(p))
-    if (p[i] == sz(pat)) res.push_back(i - 2 * sz(pat));
+    if (p[i] == sz(pat)) res.emb(i - 2 * sz(pat));
   return res;
 }

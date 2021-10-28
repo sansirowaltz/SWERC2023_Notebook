@@ -29,7 +29,7 @@ vector<array<int, 3>> manhattanMST(vector<P> ps) {
         int j = it->second;
         P d = ps[i] - ps[j];
         if (d.y > d.x) break;
-        edges.push_back({d.y + d.x, i, j});
+        edges.pb({d.y + d.x, i, j});
       }
       sweep[-ps[i].y] = i;
     }

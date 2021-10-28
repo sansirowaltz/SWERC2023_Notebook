@@ -8,9 +8,7 @@
  */
 #pragma once
 
-struct Edge {
-  int u, v, w;
-};
+struct Edge { int u, v, w; };
 struct Node {
   int v, h; ll w;
   Node *ls, *rs;

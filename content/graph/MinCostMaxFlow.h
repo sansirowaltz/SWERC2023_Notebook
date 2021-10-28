@@ -16,14 +16,11 @@ struct MCMF {
   const C inf = numeric_limits<C>::max();
   struct Edge { int to, rev; F flo, cap; C cost; };
   int N; vector<C> pi, dist; vector<pii> pre; vector<vector<Edge>> adj;
-
   MCMF(int N) : N(N), pi(N), dist(N), pre(N), adj(N) {}
-
   void addEdge(int u, int v, F cap, C cost) {
     adj[u].pb({v, sz(adj[v]), 0, cap, cost});
     adj[v].pb({u, sz(adj[u]) - 1, 0, 0, -cost});
   }
-
   bool path(int s, int t) {
     dist.assign(N, inf);
     priority_queue<T, vector<T>, greater<T>> q;
@@ -38,7 +35,6 @@ struct MCMF {
     }
     return dist[t] != inf;
   }
-
   pair<F, C> maxflow(int s, int t) {
     F totFlow = 0; C totCost = 0;
     while (path(s, t)) {
@@ -56,7 +52,6 @@ struct MCMF {
     }
     return {totFlow, totCost};
   }
-
   // If some costs can be negative, call this before maxflow:
   void setpi(int s) { // (otherwise, leave this out)
     fill(all(pi), inf); pi[s] = 0;

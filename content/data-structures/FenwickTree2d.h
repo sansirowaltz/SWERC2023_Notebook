@@ -16,10 +16,10 @@ struct FT2 {
   vector<vi> ys; vector<FT> ft;
   FT2(int limx) : ys(limx) {}
   void fakeUpdate(int x, int y) {
-    for (; x < sz(ys); x |= x + 1) ys[x].push_back(y);
+    for (; x < sz(ys); x |= x + 1) ys[x].emb(y);
   }
   void init() {
-    for (vi& v : ys) sort(all(v)), uniq(v), ft.emplace_back(sz(v));
+    for (vi& v : ys) sort(all(v)), uniq(v), ft.emb(sz(v));
   }
   int ind(int x, int y) {
     return (int)(lower_bound(all(ys[x]), y) - ys[x].begin()); }

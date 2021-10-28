@@ -45,7 +45,7 @@ vector<H> getHashes(string& str, int length) {
     h = h * C + str[i], pw = pw * C;
   vector<H> ret = {h};
   rep(i,length,sz(str)) {
-    ret.push_back(h = h * C + str[i] - pw * str[i-length]);
+    ret.pb(h = h * C + str[i] - pw * str[i-length]);
   }
   return ret;
 }

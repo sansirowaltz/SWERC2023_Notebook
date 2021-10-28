@@ -98,8 +98,8 @@ vector<P> triangulate(vector<P> pts) {
   vector<Q> q = {e};
   int qi = 0;
   while (e->o->F().cross(e->F(), e->p) < 0) e = e->o;
-#define ADD { Q c = e; do { c->mark = 1; pts.push_back(c->p); \
-  q.push_back(c->r()); c = c->next(); } while (c != e); }
+#define ADD { Q c = e; do { c->mark = 1; pts.pb(c->p); \
+  q.pb(c->r()); c = c->next(); } while (c != e); }
   ADD; pts.clear();
   while (qi < sz(q)) if (!(e = q[qi++])->mark) ADD;
   return pts;

@@ -15,7 +15,7 @@ int main1() {
       r >>= 5;
       int b = r % N;
       if (a == b) continue;
-      ts.either(a ^ (s&1 ? 0 : -1), b ^ (s&2 ? 0 : -1));
+      ts.orClause(a ^ (s&1 ? 0 : -1), b ^ (s&2 ? 0 : -1));
     }
     assert(ts.solve() == 0);
   }
@@ -32,7 +32,7 @@ int main1() {
       r >>= 5;
       int b = r % N;
       if (a == b) continue;
-      ts.either(a ^ (v[a] ? 0 : -1), b ^ (s&1 ? 0 : -1));
+      ts.orClause(a ^ (v[a] ? 0 : -1), b ^ (s&1 ? 0 : -1));
     }
     assert(ts.solve() == 1);
   }
@@ -42,11 +42,11 @@ int main1() {
 int main2() {
   int N = 4;
   TwoSat ts(N);
-  ts.either(0,1);
-  ts.either(0,~1);
-  ts.either(~2,~3);
-  assert(ts.solve()==1);
-  assert(ts.values == vi({1, 1, 0, 0}));
+  ts.orClause(0,1);
+  ts.orClause(0,~1);
+  ts.orClause(~2,~3);
+  assert(ts.solve() == 1);
+  assert(ts.values == vi({1, 1, 1, 0}));
   return 0;
 }
 
@@ -77,7 +77,7 @@ int main() {
         r >>= 5;
         int b = r % N;
         if (a == b) continue;
-        ts.either(v[a] ? a : ~a, (s&1) ? b : ~b);
+        ts.orClause(v[a] ? a : ~a, (s&1) ? b : ~b);
       } else {
         int k = ra() % 4 + 1;
         r.clear();

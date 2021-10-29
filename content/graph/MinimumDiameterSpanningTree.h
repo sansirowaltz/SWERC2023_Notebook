@@ -3,9 +3,9 @@
  * Date: 2020-10-28
  * License: CC0
  * Source: https://web.archive.org/web/20160309101249/https://adn.botao.hu/adn-backup/blog/attachments/month_0705/32007531153238.pdf
- * Description: Find a minimum diameter spanning tree
- * Usage: Call init() first. Add edge and call findMDST(). Return diameter.
- * Time: $O(n^3)$
+ * Description: Find a minimum diameter spanning tree.
+ * Call init() first. Add edge and call findMDST(). Return diameter.
+ * Time: O(n^3)
  * Status: Tested on https://codeforces.com/contest/266/problem/D
  */
 #pragma once

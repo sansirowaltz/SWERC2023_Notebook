@@ -15,6 +15,11 @@ jobs:
       run: sudo apt-get install texlive-latex-base texlive-latex-recommended texlive-latex-extra
     - name: Build pdf
       run: make hcmus
+    - name: Upload to Artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: PDF
+        path: build/hcmus.pdf
     - name: Run compiles
       run: make test-compiles
     - name: Run stress tests

@@ -2,7 +2,7 @@
  * Author: Yaowei Lyu
  * Date: 2021-10-28
  * Source: https://judge.yosupo.jp/submission/60375
- * Description: Find the k shortest paths (not required to be simple) in a digraph
+ * Description: Finds the k shortest paths (not required to be simple) from S to T in a digraph.
  * Time: O(M + N \log N + K)
  * Status: Tested on yosupo:k_shortest_walk
  */

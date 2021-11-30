@@ -18,7 +18,7 @@ private:
     inline T calc(T x) const { return a * x + b; }
   };
   struct Node {
-    Line line = {0, maxi ? defVal : -defVal};
+    Line line = {0, maximum ? defVal : -defVal};
     Node *lt = nullptr, *rt = nullptr;
   } *root;
   void update(Node* cur, T l, T r, T u, T v, Line nw) {
@@ -48,7 +48,7 @@ private:
 public:
   DynamicLiChaoTree() { root = new Node(); }
   void add(T a, T b, T l = minX, T r = maxX) {
-    if (!maxi) a = -a, b = -b;
+    if (!maximum) a = -a, b = -b;
     update(root, minX, maxX, l, r, {a, b});
   }
   T query(T x) {
@@ -60,6 +60,6 @@ public:
       if (x <= mid) cur = cur->lt, r = mid;
       else cur = cur->rt, l = mid + 1;
     }
-    return maxi ? res : -res;
+    return maximum ? res : -res;
   }
 };

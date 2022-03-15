@@ -1,65 +1,82 @@
 /**
- * Author: Benjamin Qi
- * Date: 2021-10-07
- * License: CC0
- * Source: https://github.com/bqi343/USACO/blob/master/Implementations/content/graphs%20(12)/Flows%20(12.3)/MCMF.h
+ * Author: RR
+ * Date: 2022-03-15
+ * Source: https://github.com/icpcvn/icpcvn.github.io/blob/master/2016/regional/solutions/F/RR.cpp
  * Description: Min-cost max-flow, assumes no negative cycles.
- *  If costs can be negative, call setpi before maxflow.
- *  To get flow through original edges, assign ID's during \texttt{addEdge}.
  * Status: Tested on kattis:mincostmaxflow, stress-tested against another implementation
- * Time: Ignoring setpi, $O(FM\log M)$ if caps are integers and $F$ is max flow.
+ * Time: Ignoring SPFA, $O(FM\log M)$ if caps are integers and $F$ is max flow.
  */
 #pragma once
 
 struct MCMF {
-  using F = ll; using C = ll; using T = pair<C, int>;
-  const C inf = numeric_limits<C>::max();
-  struct Edge { int to, rev; F flo, cap; C cost; };
-  int N; vector<C> pi, dist; vector<pii> pre; vector<vector<Edge>> adj;
-  MCMF(int N) : N(N), pi(N), dist(N), pre(N), adj(N) {}
-  void addEdge(int u, int v, F cap, C cost) {
-    adj[u].pb({v, sz(adj[v]), 0, cap, cost});
-    adj[v].pb({u, sz(adj[u]) - 1, 0, 0, -cost});
+  using F = ll; using C = ll;
+  const F INF_FLOW = numeric_limits<F>::max();
+  const C INF_COST = numeric_limits<C>::max();
+  struct Edge {
+    int to; F cap; C cost; int next;
+    Edge(int to, F cap, C cost, int next) : to(to), cap(cap), cost(cost), next(next) {}
+  };
+  int n, t, S, T; F totalFlow; C totalCost;
+  vi last, vis; vector<C> dis; vector<Edge> edges;
+  MCMF(int n) : n(n), t(0), totalFlow(0), totalCost(0), last(n, -1), vis(n, 0), dis(n, 0) {}
+  int addEdge(int from, int to, F cap, C cost) {
+    edges.push_back(Edge(to, cap, cost, last[from]));
+    last[from] = t++;
+    edges.push_back(Edge(from, 0, -cost, last[to]));
+    last[to] = t++;
+    return t - 2;
   }
-  bool path(int s, int t) {
-    dist.assign(N, inf);
-    priority_queue<T, vector<T>, greater<T>> q;
-    q.push({dist[s] = 0, s});
-    while (!q.empty()) {
-      C nd; T x = q.top(); q.pop();
-      if (x.first > dist[x.second]) continue;
-      for (auto& e : adj[x.second]) {
-        if (e.flo < e.cap && dist[e.to] > (nd = x.first + e.cost + pi[x.second] - pi[e.to]))
-          pre[e.to] = {x.second, e.rev}, q.push({dist[e.to] = nd, e.to});
+  pair<F, C> maxflow(int _S, int _T) {
+    S = _S; T = _T; SPFA();
+    while (1) { while (1) {
+        rep(i,0,n) vis[i] = 0;
+        if (!findFlow(S, INF_FLOW)) break;
       }
+      if (!modifyLabel()) break;
     }
-    return dist[t] != inf;
+    return {totalFlow, totalCost};
   }
-  pair<F, C> maxflow(int s, int t) {
-    F totFlow = 0; C totCost = 0;
-    while (path(s, t)) {
-      rep(i,0,N) pi[i] += dist[i];
-      F df = numeric_limits<F>::max();
-      for (int x = t; x != s; x = pre[x].first) {
-        Edge& e = adj[pre[x].first][adj[x][pre[x].second].rev];
-        df = min(df, e.cap - e.flo);
-      }
-      totFlow += df; totCost += (pi[t] - pi[s]) * df;
-      for (int x = t; x != s; x = pre[x].first) {
-        Edge& e = adj[x][pre[x].second]; e.flo -= df;
-        adj[pre[x].first][e.rev].flo += df;
-      }
+private:
+  void SPFA() {
+    rep(i,0,n) dis[i] = INF_COST;
+    min_heap<pair<C, int>> Q;
+    Q.emplace(dis[S] = 0, S);
+    while (!Q.empty()) {
+      C d = Q.top().first;
+      int x = Q.top().second;
+      Q.pop();
+      // For double: dis[x] > d + EPS
+      if (dis[x] != d) continue;
+      for (int it = last[x]; it >= 0; it = edges[it].next)
+        if (edges[it].cap > 0 && dis[edges[it].to] > d + edges[it].cost)
+          Q.emplace(dis[edges[it].to] = d + edges[it].cost, edges[it].to);
     }
-    return {totFlow, totCost};
+    C disT = dis[T];
+    rep(i, 0, n) dis[i] = disT - dis[i];
   }
-  // If some costs can be negative, call this before maxflow:
-  void setpi(int s) { // (otherwise, leave this out)
-    fill(all(pi), inf); pi[s] = 0;
-    int it = N, ch = 1; C v;
-    while (ch-- && it--) rep(i,0,N) if (pi[i] != inf)
-      for (auto e : adj[i])
-        if (e.cap && (v = pi[i] + e.cost) < pi[e.to])
-          pi[e.to] = v, ch = 1;
-    assert(it >= 0); // negative cost cycle
+  F findFlow(int x, F flow) {
+    if (x == T) {
+      totalCost += dis[S] * flow; totalFlow += flow;
+      return flow;
+    }
+    vis[x] = 1; F now = flow;
+    for (int it = last[x]; it >= 0; it = edges[it].next)
+      // For double: fabs(dis[edges[it].to] + edges[it].cost - dis[x]) < EPS
+      if (edges[it].cap && !vis[edges[it].to] && dis[edges[it].to] + edges[it].cost == dis[x]) {
+        F tmp = findFlow(edges[it].to, min(now, edges[it].cap));
+        edges[it].cap -= tmp; edges[it ^ 1].cap += tmp; now -= tmp;
+        if (!now) break;
+      }
+    return flow - now;
+  }
+  bool modifyLabel() {
+    C d = INF_COST;
+    rep(i,0,n) if (vis[i])
+      for (int it = last[i]; it >= 0; it = edges[it].next) if (edges[it].cap && !vis[edges[it].to])
+        d = min(d, dis[edges[it].to] + edges[it].cost - dis[i]);
+    // For double: if (d > INF_COST / 10)     INF_COST = 1e20
+    if (d == INF_COST) return false;
+    rep(i,0,n) if (vis[i]) dis[i] += d;
+    return true;
   }
 };

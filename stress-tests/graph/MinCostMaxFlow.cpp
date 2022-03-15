@@ -1,17 +1,9 @@
 #include "../utilities/template.h"
 
-// #include "mcmf3.h"
-// #include "mcmf4.h"
-// #include "mcmfold.h"
-// #include "mcmfnew.h"
-#define setpi dummy(){} bool setpi
-#undef assert
-#define assert(x) return x
 #include "../../content/graph/MinCostMaxFlow.h"
-#undef assert
-#undef setpi
 #include <cassert>
 #include "MinCostMaxFlow2.h"
+#include "MinCostMaxFlow3.h"
 
 struct MCMF2 {
   vector<vector<FlowEdge>> g;
@@ -154,7 +146,7 @@ void testMatching() {
     rep(i,0,N) mcmf.addEdge(S, i, 1, 0);
     rep(i,0,M) mcmf.addEdge(N+i, T, 1, 0);
     rep(i,0,N) rep(j,0,M) mcmf.addEdge(i, N+j, 1, co[i][j] - 2);
-    mcmf.setpi(S);
+    //mcmf.setpi(S);
     auto pa = mcmf.maxflow(S, T);
     assert(pa.first == min(N, M));
     assert(pa.second == v - 2 * pa.first);
@@ -171,6 +163,7 @@ void testNeg() {
     int S = 0, T = 1;
     MCMF mcmf(N);
     MCMF2 mcmf2(N);
+    MCMF3 mcmf3(N);
     rep(i,0,N) rep(j,0,N) ed[i][j] = 0;
     rep(eid,0,M) {
       int i = rand() % N, j = rand() % N;
@@ -180,9 +173,10 @@ void testNeg() {
         int co = rand() % 11 - 3;
         mcmf.addEdge(i, j, fl, co);
         mcmf2.addEdge(i, j, fl, co);
+        mcmf3.addEdge(i, j, fl, co);
       }
     }
-    if (!mcmf.setpi(S))  // has negative loops
+    if (!mcmf3.setpi(S))  // has negative loops
       continue;
     auto pa = mcmf.maxflow(S, T);
     auto pa2 = mcmf2.maxflow(S, T);

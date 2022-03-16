@@ -61,10 +61,11 @@ private:
     }
     vis[x] = 1; F now = flow;
     for (int it = last[x]; it >= 0; it = edges[it].next)
-      // For double: fabs(dis[edges[it].to] + edges[it].cost - dis[x]) < EPS
-      if (edges[it].cap && !vis[edges[it].to] && dis[edges[it].to] + edges[it].cost == dis[x]) {
-        F tmp = findFlow(edges[it].to, min(now, edges[it].cap));
-        edges[it].cap -= tmp; edges[it ^ 1].cap += tmp; now -= tmp;
+      // For double: abs(dis[edges[it].to]+edges[it].cost-dis[x])<EPS
+      if (edges[it].cap && !vis[edges[it].to] &&
+          dis[edges[it].to] + edges[it].cost == dis[x]) {
+        F tmp = findFlow(edges[it].to,min(now,edges[it].cap));
+        edges[it].cap-=tmp;edges[it^1].cap+=tmp;now-=tmp;
         if (!now) break;
       }
     return flow - now;
@@ -72,8 +73,9 @@ private:
   bool modifyLabel() {
     C d = INF_COST;
     rep(i,0,n) if (vis[i])
-      for (int it = last[i]; it >= 0; it = edges[it].next) if (edges[it].cap && !vis[edges[it].to])
-        d = min(d, dis[edges[it].to] + edges[it].cost - dis[i]);
+      for (int it = last[i]; it >= 0; it = edges[it].next)
+        if (edges[it].cap && !vis[edges[it].to])
+          d = min(d,dis[edges[it].to]+edges[it].cost-dis[i]);
     // For double: if (d > INF_COST / 10)     INF_COST = 1e20
     if (d == INF_COST) return false;
     rep(i,0,n) if (vis[i]) dis[i] += d;

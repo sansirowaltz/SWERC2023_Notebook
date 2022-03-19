@@ -174,3 +174,13 @@ If $X_1 \sim \mathcal{N}(\mu_1,\sigma_1^2)$ and $X_2 \sim \mathcal{N}(\mu_2,\sig
 % A Markov chain is an A-chain if the states can be partitioned into two sets $\mathbf{A}$ and $\mathbf{G}$, such that all states in $\mathbf{A}$ are absorbing ($p_{ii}=1$), and all states in $\mathbf{G}$ leads to an absorbing state in $\mathbf{A}$.
 % The probability for absorption in state $i\in\mathbf{A}$, when the initial state is $j$, is $a_{ij} = p_{ij}+\sum_{k\in\mathbf{G}} a_{ik}p_{kj}$.
 % The expected time until absorption, when the initial state is $i$, is $t_i = 1+\sum_{k\in\mathbf{G}}p_{ki}t_k$.
+
+\section{Pisano period}
+
+If $m$ and $n$ are coprime, then $k(mn) = \mathrm{lcm}(k(m), k(n))$.
+
+If $p$ is a prime, then $k(p^n)$ is a divisor of $p^{n - 1} \cdot k(p)$.
+
+If $p > 5$ is a prime and $p \equiv \pm 1 \pmod 5$, then $k(p)$ is a divisor of $p - 1$.
+
+If $p > 5$ is a prime and $p \equiv \pm 2 \pmod 5$, then $k(p)$ is a divisor of $2(p + 1)$.

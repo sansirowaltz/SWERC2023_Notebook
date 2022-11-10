@@ -24,6 +24,9 @@
  *     - Build SA of S+S, then just follow smallest link
  *  6. Find first occurrence
  *     - firstpos[cur] = len[cur] - 1, firstpos[clone] = firstpos[q]
+ *  7. Find longest common substring of two strings:
+ *    - Build SA of S. For each prefix of T, find longest suffix
+ *    of this prefix in S: follow suffix link if can not add character
  */
 #pragma once
 

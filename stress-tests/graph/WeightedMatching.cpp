@@ -5,13 +5,15 @@
 #include "../../content/graph/WeightedMatching.h"
 #include "../../content/graph/MinCostMaxFlow.h"
 
+constexpr ll INF64 = 0x3f3f3f3f3f3f3f3f;
+
 void test(int N, int mxCost, int iters) {
     for (int it = 0; it < iters; it++) {
         int n = randRange(0, N), m = randRange(0, N);
         if (n > m)
             swap(n, m);
 
-        MCMF mcmf(n + m + 2);
+        CostScalingMCMF<3000, ll, ll, INF64, INF64> mcmf;
         int s = 0;
         int t = 1;
         for (int i = 0; i < n; i++)
@@ -26,8 +28,7 @@ void test(int N, int mxCost, int iters) {
                 mcmf.addEdge(i + 2, 2 + n + j, 1, cost[i][j]);
             }
         }
-        //mcmf.setpi(s);
-        auto maxflow = mcmf.maxflow(s, t);
+        auto maxflow = mcmf.maxflow(n + m + 2, s, t);
         auto matching = hungarian(cost);
         assert(maxflow.first == n);
         assert(maxflow.second == matching.first);

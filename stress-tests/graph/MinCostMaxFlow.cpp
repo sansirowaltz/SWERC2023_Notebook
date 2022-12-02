@@ -7,6 +7,29 @@
 
 constexpr ll INF64 = 0x3f3f3f3f3f3f3f3f;
 
+struct FloydWarshall {
+  const ll inf = 1LL << 62;
+  vector<vector<ll>> m;
+
+  FloydWarshall(int n) : m(n, vector<ll>(n, inf)) {}
+
+  void addEdge(int u, int v, ll w) {
+    m[u][v] = min(m[u][v], w);
+  }
+
+  bool hasNegativeCycle() {
+    int n = sz(m);
+    rep(i,0,n) m[i][i] = min(m[i][i], 0LL);
+    rep(k,0,n) rep(i,0,n) rep(j,0,n)
+      if (m[i][k] != inf && m[k][j] != inf) {
+        auto newDist = max(m[i][k] + m[k][j], -inf);
+        m[i][j] = min(m[i][j], newDist);
+      }
+    rep(k,0,n) if (m[k][k] < 0) return true;
+    return false;
+  }
+};
+
 struct MCMF2 {
   vector<vector<FlowEdge>> g;
   MCMF2(int n) : g(n) {}
@@ -148,7 +171,6 @@ void testMatching() {
     rep(i,0,N) mcmf.addEdge(S, i, 1, 0);
     rep(i,0,M) mcmf.addEdge(N+i, T, 1, 0);
     rep(i,0,N) rep(j,0,M) mcmf.addEdge(i, N+j, 1, co[i][j] - 2);
-    //mcmf.setpi(S);
     auto pa = mcmf.maxflow(N+M+2, S, T);
     assert(pa.first == min(N, M));
     assert(pa.second == v - 2 * pa.first);
@@ -166,6 +188,7 @@ void testNeg() {
     CostScalingMCMF<501, ll, ll, INF64, INF64> mcmf;
     MCMF2 mcmf2(N);
     MCMF3 mcmf3(N);
+    FloydWarshall fw(N);
     rep(i,0,N) rep(j,0,N) ed[i][j] = 0;
     rep(eid,0,M) {
       int i = rand() % N, j = rand() % N;
@@ -176,9 +199,10 @@ void testNeg() {
         mcmf.addEdge(i, j, fl, co);
         mcmf2.addEdge(i, j, fl, co);
         mcmf3.addEdge(i, j, fl, co);
+        fw.addEdge(i, j, co);
       }
     }
-    if (!mcmf3.setpi(S))  // has negative loops
+    if (fw.hasNegativeCycle() || !mcmf3.setpi(S))  // has negative loops
       continue;
     auto pa = mcmf.maxflow(N, S, T);
     auto pa2 = mcmf2.maxflow(S, T);
@@ -190,5 +214,5 @@ void testNeg() {
 
 int main() {
   testMatching();
-  // testNeg();
+  testNeg();
 }

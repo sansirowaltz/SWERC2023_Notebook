@@ -17,26 +17,46 @@
  */
 #pragma once
 
-struct SuffixArray {
-  vi sa, lcp;
-  SuffixArray(string& s, int lim=256) { // or basic_string<int>
-    int n = sz(s) + 1, k = 0, a, b;
-    vi x(all(s)+1), y(n), ws(max(n, lim)), rank(n);
-    sa = lcp = y, iota(all(sa), 0);
-    for (int j = 0, p = 0; p < n; j = max(1, j * 2), lim = p) {
-      p = j, iota(all(y), n - j);
-      rep(i,0,n) if (sa[i] >= j) y[p++] = sa[i] - j;
-      fill(all(ws), 0);
-      rep(i,0,n) ws[x[i]]++;
-      rep(i,1,lim) ws[i] += ws[i - 1];
-      for (int i = n; i--;) sa[--ws[x[y[i]]]] = y[i];
-      swap(x, y), p = 1, x[sa[0]] = 0;
-      rep(i,1,n) a = sa[i - 1], b = sa[i], x[b] =
-        (y[a] == y[b] && y[a + j] == y[b + j]) ? p - 1 : p++;
+     memset(rankcnt,0,sizeof(rankcnt));
+    for (int i=1;i<=len;i++) rankcnt[a[i]]++;
+    for (int i=98;i<123;i++) rankcnt[i]+=rankcnt[i-1];
+    for (int i=1;i<=len;i++) rank[i]=rankcnt[a[i]];
+    int l=1;
+    while (l<len)
+    {
+        for (int i=1;i<=len;i++)
+        {
+            rank1[i]=rank[i];
+            if (i+l<=len) rank2[i]=rank[i+l]; else rank2[i]=0;
+        }
+        memset(rankcnt,0,sizeof(rankcnt));
+        for (int i=1;i<=len;i++) rankcnt[rank2[i]]++;
+        for (int i=1;i<=len;i++) rankcnt[i]+=rankcnt[i-1];
+        for (int i=len;i;i--)
+        {
+            tmpsa[rankcnt[rank2[i]]]=i;rankcnt[rank2[i]]--;
+        }
+        memset(rankcnt,0,sizeof(rankcnt));
+        for (int i=1;i<=len;i++) rankcnt[rank1[i]]++;
+        for (int i=1;i<=len;i++) rankcnt[i]+=rankcnt[i-1];
+        for (int i=len;i;i--)
+        {
+            sa[rankcnt[rank1[tmpsa[i]]]]=tmpsa[i];rankcnt[rank1[tmpsa[i]]]--;
+        }
+        rank[sa[1]]=1;
+        for (int i=2;i<=len;i++)
+        {
+            rank[sa[i]]=rank[sa[i-1]];
+            if ((rank1[sa[i]]!=rank1[sa[i-1]])||(rank2[sa[i]]!=rank2[sa[i-1]])) rank[sa[i]]++;
+        }
+        if (rank[sa[len]]==len) break;
+        l<<=1;
     }
-    rep(i,1,n) rank[sa[i]] = i;
-    for (int i = 0, j; i < n - 1; lcp[rank[i++]] = k)
-      for (k && k--, j = sa[rank[i] - 1];
-          s[i + k] == s[j + k]; k++);
-  }
-};
+    l=0;
+    for (int i=1;i<=len;i++)
+        if (rank[i]>1)
+        {
+            int j=sa[rank[i]-1];
+            while ((i+l<=len)&&(j+l<=len)&&(a[i+l]==a[j+l])) l++;
+            height[rank[i]]=l;if (l) l--;
+        }

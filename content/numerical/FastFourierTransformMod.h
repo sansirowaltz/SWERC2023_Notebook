@@ -15,25 +15,32 @@
 
 #include "FastFourierTransform.h"
 
-typedef vector<ll> vl;
-template<int M> vl convMod(const vl &a, const vl &b) {
-  if (a.empty() || b.empty()) return {};
-  vl res(sz(a) + sz(b) - 1);
-  int B=32-__builtin_clz(sz(res)), n=1<<B, cut=int(sqrt(M));
-  vector<C> L(n), R(n), outs(n), outl(n);
-  rep(i,0,sz(a)) L[i] = C((int)a[i] / cut, (int)a[i] % cut);
-  rep(i,0,sz(b)) R[i] = C((int)b[i] / cut, (int)b[i] % cut);
-  fft(L), fft(R);
-  rep(i,0,n) {
-    int j = -i & (n - 1);
-    outl[j] = (L[i] + conj(L[j])) * R[i] / (2.0 * n);
-    outs[j] = (L[i] - conj(L[j])) * R[i] / (2.0 * n) / 1i;
-  }
-  fft(outl), fft(outs);
-  rep(i,0,sz(res)) {
-    ll av = ll(real(outl[i])+.5), cv = ll(imag(outs[i])+.5);
-    ll bv = ll(imag(outl[i])+.5) + ll(real(outs[i])+.5);
-    res[i] = ((av % M * cut + bv) % M * cut + cv) % M;
-  }
-  return res;
+void dft(int *a,int n,int *ans)
+{
+	for (int i=0;i<n;i++) ans[i]=a[bitrev[i]];
+	for (int i=1,len=n>>1;i<n;i<<=1,len>>=1)
+		for (int j=0;j<n;j+=(i<<1))
+			for (int k=0,p=0;k<i;k++,p+=len)
+			{
+				int u=ans[j+k],v=ll(ans[j+k+i])*w[p]%fft_m;
+				ans[j+k]=(u+v)%fft_m;ans[j+k+i]=(u-v+fft_m)%fft_m;
+			}
+}
+
+void fft(int *a,int n,int *b,int m,int *ans)
+{
+	int len=1;while (len<=n+m) len<<=1;
+	for (int i=n+1;i<len;i++) a[i]=0;
+	for (int i=m+1;i<len;i++) b[i]=0;
+	bitrev[0]=0;
+	for (int i=1;i<len;i<<=1)
+		for (int j=0;j<i;j++)
+			bitrev[j+i]=bitrev[j]+(len>>1)/i;
+	int wm=power(fft_g,(fft_m-1)/len,fft_m);
+	w[0]=1;for (int i=1;i<len;i++) w[i]=ll(w[i-1])*wm%fft_m;
+	dft(a,len,c);dft(b,len,ans);
+	for (int i=1;i<len/2;i++) swap(w[i],w[len-i]);
+	for (int i=0;i<len;i++) c[i]=ll(c[i])*ans[i]%fft_m;
+	dft(c,len,ans);wm=power(len,fft_m-2,fft_m);
+	for (int i=0;i<=n+m;i++) ans[i]=ll(ans[i])*wm%fft_m;
 }

@@ -9,45 +9,60 @@
  */
 #pragma once
 
-struct Dinic {
-  struct Edge {
-    int to, rev;
-    ll c, oc;
-    ll flow() { return max(oc - c, 0LL); } // if you need flows
-  };
-  vi lvl, ptr, q;
-  vector<vector<Edge>> adj;
-  Dinic(int n) : lvl(n), ptr(n), q(n), adj(n) {}
-  void addEdge(int a, int b, ll c, ll rcap = 0) {
-    adj[a].pb({b, sz(adj[b]), c, c});
-    adj[b].pb({a, sz(adj[a]) - 1, rcap, rcap});
-  }
-  ll dfs(int v, int t, ll f) {
-    if (v == t || !f) return f;
-    for (int& i = ptr[v]; i < sz(adj[v]); i++) {
-      Edge& e = adj[v][i];
-      if (lvl[e.to] == lvl[v] + 1)
-        if (ll p = dfs(e.to, t, min(f, e.c))) {
-          e.c -= p, adj[e.to][e.rev].c += p;
-          return p;
-        }
-    }
-    return 0;
-  }
-  ll calc(int s, int t) {
-    ll flow = 0; q[0] = s;
-    rep(L,0,31) do { // 'int L=30' maybe faster for random data
-      lvl = ptr = vi(sz(q));
-      int qi = 0, qe = lvl[s] = 1;
-      while (qi < qe && !lvl[t]) {
-        int v = q[qi++];
-        for (Edge e : adj[v])
-          if (!lvl[e.to] && e.c >> (30 - L))
-            q[qe++] = e.to, lvl[e.to] = lvl[v] + 1;
-      }
-      while (ll p = dfs(s, t, LLONG_MAX)) flow += p;
-    } while (lvl[t]);
-    return flow;
-  }
-  bool leftOfMinCut(int a) { return lvl[a] != 0; }
-};
+void push(int k,int x,int y,int c)
+{
+	e[k].to=y;e[k].cap=c;e[k].flow=0;e[k].next=head[x];head[x]=k;
+}
+
+void addedge(int x,int y,int c)
+{
+	push(edgecnt++,x,y,c);
+	push(edgecnt++,y,x,0);
+}
+
+bool bfs(int S,int T)
+{
+	for (int i=1;i<=N;i++) d[i]=N;d[T]=0;
+	int f=1,r=1;q[1]=T;
+	while (f<=r&&d[S]==N)
+	{
+		int p=head[q[f]];
+		while (p!=-1)
+		{
+			if (e[p^1].cap>e[p^1].flow&&d[e[p].to]==N)
+			{
+				q[++r]=e[p].to;d[q[r]]=d[q[f]]+1;
+			}
+			p=e[p].next;
+		}
+		f++;
+	}
+	for (int i=1;i<=N;i++) cur[i]=head[i];
+	return d[S]<N;
+}
+
+int dfs(int k,int T,int flow)
+{
+	if (k==T) return flow;
+	int Tflow=0;
+	while (cur[k]!=-1)
+	{
+		int x=cur[k];
+		if (e[x].cap>e[x].flow&&d[e[x].to]+1==d[k])
+		{
+			int tmp=dfs(e[x].to,T,min(flow,e[x].cap-e[x].flow));
+			e[x].flow+=tmp;e[x^1].flow-=tmp;
+			Tflow+=tmp;flow-=tmp;
+			if (!flow) return Tflow;
+		}
+		cur[k]=e[x].next;
+	}
+	return Tflow;
+}
+
+int dinic(int S,int T)
+{
+	int flow=0;
+	while (bfs(S,T)) flow+=dfs(S,T,inf);
+	return flow;
+}
